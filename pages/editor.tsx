@@ -11,8 +11,12 @@ import { isServer } from "../utils/isServer";
 
 import { Container } from "../styles/editor";
 
+import Landing from "./landing";
+
 const Editor: React.FC = () => {
   const { current, get } = usePage();
+
+  if (isServer) return <Landing />;
 
   return (
     <Wrapper>
