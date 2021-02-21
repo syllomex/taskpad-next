@@ -30,22 +30,20 @@
   font-display: swap;
 }
 
-@font-face {
-  font-family: "Rajdhani";
-  src: url("/fonts/Rajdhani/Rajdhani-Regular");
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Rajdhani";
-  src: url("/fonts/Rajdhani/Rajdhani-Bold");
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
+:root {
+  --primary: #0288d1;
+  --secondary: #474c55;
+  --background: #282c34;
+  --background-secondary: #21252c;
+  --text-regular: #fefefe;
+  --text-muted: #767676;
 }
 
 * {
   font-family: "Poppins";
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+
+  transition-duration: 100ms;
 }
