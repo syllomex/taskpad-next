@@ -23,21 +23,9 @@ const App: NextPage = () => (
         as="font"
         crossOrigin=""
       />
-      <link
-        rel="preload"
-        href="/fonts/Rajdhani/Rajdhani-Regular.ttf"
-        as="font"
-        crossOrigin=""
-      />
-      <link
-        rel="preload"
-        href="/fonts/Rajdhani/Rajdhani-Bold.ttf"
-        as="font"
-        crossOrigin=""
-      />
       <title>TaskPad Next</title>
     </Head>
-    <h1>TaskPad Next</h1>
+    <h1 style={{ fontFamily: "Poppins", fontWeight: 700 }}>TaskPad Next</h1>
   </div>
 );
 
