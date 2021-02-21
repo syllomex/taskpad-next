@@ -47,4 +47,5 @@
   box-sizing: border-box;
 
   transition-duration: 100ms;
+  color: var(--text-regular);
 }

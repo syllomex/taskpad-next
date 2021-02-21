@@ -30,7 +30,7 @@ const Nav: React.FC = () => {
       ))}
 
       <Item key={0} name="Criar página" onClick={() => create()}>
-        <FaPlus color="#767676" size={20} />
+        <FaPlus style={{ fill: "#767676" }} size={20} />
       </Item>
     </Container>
   );

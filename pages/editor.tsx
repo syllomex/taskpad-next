@@ -4,6 +4,8 @@ import React from "react";
 import Nav from "../components/Nav";
 import Title from "../components/Title";
 import Wrapper from "../components/Wrapper";
+import TextBox from "../components/TextBox";
+import Lines from "../components/Lines";
 
 import { usePage } from "../store/page";
 
@@ -11,12 +13,10 @@ import { isServer } from "../utils/isServer";
 
 import { Container } from "../styles/editor";
 
-import Landing from "./landing";
-
 const Editor: React.FC = () => {
   const { current, get } = usePage();
 
-  if (isServer) return <Landing />;
+  if (isServer) return null;
 
   return (
     <Wrapper>
@@ -32,6 +32,8 @@ const Editor: React.FC = () => {
       {current && (
         <Container>
           <Title />
+          <Lines />
+          <TextBox />
         </Container>
       )}
     </Wrapper>

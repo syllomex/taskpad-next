@@ -12,10 +12,22 @@ export type PageListItem = {
   name: string;
 };
 
-type Line = {
+export type Schedule = {
+  id: string;
+  datetime: string;
+  action: "start" | "stop";
+};
+
+export type Schedules = {
+  running: boolean;
+  times: Schedule[];
+};
+
+export type Line = {
   id: string;
   content: string;
   checked: boolean;
+  schedules: Schedules;
 };
 
 export type Page = {
@@ -31,6 +43,10 @@ type PageContextType = {
   setPageList: SetState<PageList>;
   currentPage: string | undefined;
   setCurrentPage: SetState<string | undefined>;
+  currentLines: Line[] | undefined;
+  setCurrentLines: SetState<Line[] | undefined>;
+  running: string | undefined;
+  setRunning: SetState<string | undefined>;
 };
 
 const PageContext = React.createContext({} as PageContextType);
@@ -40,10 +56,23 @@ const PageProvider: React.FC = ({ children }) => {
     !isServer ? storage.pages.getList() : []
   );
   const [currentPage, setCurrentPage] = useState<string>();
+  const [currentLines, setCurrentLines] = useState<Line[]>();
+  const [running, setRunning] = useState<string>(
+    !isServer ? storage.pages.getLastRunning() : undefined
+  );
 
   return (
     <PageContext.Provider
-      value={{ pageList, setPageList, currentPage, setCurrentPage }}
+      value={{
+        pageList,
+        setPageList,
+        currentPage,
+        setCurrentPage,
+        currentLines,
+        setCurrentLines,
+        running,
+        setRunning,
+      }}
     >
       {children}
     </PageContext.Provider>
@@ -51,12 +80,20 @@ const PageProvider: React.FC = ({ children }) => {
 };
 
 const usePage = () => {
-  const { pageList, setPageList, currentPage, setCurrentPage } = useContext(
-    PageContext
-  );
+  const {
+    pageList,
+    setPageList,
+    currentPage,
+    setCurrentPage,
+    currentLines,
+    setCurrentLines,
+    running,
+    setRunning,
+  } = useContext(PageContext);
 
   const select = (id: string) => {
     setCurrentPage(id);
+    setCurrentLines(storage.pages.getPage(id).lines);
   };
 
   const create = (name = "Nova página") => {
@@ -84,6 +121,62 @@ const usePage = () => {
     storage.pages.storeList(newList);
   };
 
+  const createLine = (content: string) => {
+    const current = storage.pages.getPage(currentPage);
+
+    const id = v4();
+    current.lines.push({
+      id,
+      checked: false,
+      content,
+      schedules: { running: false, times: [] },
+    });
+
+    storage.pages.storePage(current);
+    setCurrentLines(current.lines);
+  };
+
+  const editLine = (line: Line, newContent: string) => {
+    const current: Line = arrayState.find(line.id, currentLines);
+    current.content = newContent;
+
+    const newLines = arrayState.replace(
+      line.id,
+      currentLines,
+      setCurrentLines,
+      current
+    );
+
+    const page = getPage(currentPage);
+    page.lines = newLines;
+    storage.pages.storePage(page);
+  };
+
+  const toggleTimer = (id: string, action: "start" | "stop") => {
+    if (action === "start") storage.pages.setLastRunning(id);
+    else storage.pages.removeLastRunning();
+
+    setRunning(action === "start" ? id : undefined);
+    const line: Line = arrayState.find(id, currentLines);
+
+    line.schedules.running = true;
+    line.schedules.times.push({
+      id: v4(),
+      action,
+      datetime: new Date().toISOString(),
+    });
+
+    const updated = arrayState.replace(id, currentLines, setCurrentLines, line);
+    const page = getPage(currentPage);
+    page.lines = updated;
+    storage.pages.storePage(page);
+  };
+
+  const timer = (id: string) => {
+    if (running === id) toggleTimer(id, "stop");
+    else toggleTimer(id, "start");
+  };
+
   return {
     list: pageList,
     create,
@@ -91,6 +184,11 @@ const usePage = () => {
     select,
     get: getPage,
     changeTitle,
+    createLine,
+    lines: currentLines,
+    editLine,
+    running,
+    timer,
   };
 };
 

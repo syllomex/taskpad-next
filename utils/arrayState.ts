@@ -1,11 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Dispatch, SetStateAction } from "react";
-import { PageList, PageListItem } from "../store/page";
 
-type State = PageList;
-type SetState = Dispatch<SetStateAction<PageList>>;
+type State = any;
+type SetState = Dispatch<SetStateAction<any>>;
 type Key = string | number;
 
-function add(item: PageListItem, state: State, setState: SetState) {
+function add(item: any, state: State, setState: SetState) {
   const current = [...state];
   current.push(item);
   setState(current);
@@ -22,24 +22,19 @@ function remove(key: Key, state: State, setState: SetState) {
   return current;
 }
 
-function findIndex(key: Key, array: PageList) {
+function findIndex(key: Key, array: any) {
   const index =
     typeof key === "string" ? array.findIndex((item) => item.id === key) : key;
 
   return index;
 }
 
-function find(key: Key, array: PageList) {
+function find(key: Key, array: any) {
   const index = findIndex(key, array);
   return array[index];
 }
 
-function replace(
-  key: Key,
-  state: State,
-  setState: SetState,
-  value: PageListItem
-) {
+function replace(key: Key, state: State, setState: SetState, value: any) {
   const index = findIndex(key, state);
   const cur = [...state];
   cur.splice(index, 1, value);
@@ -52,6 +47,7 @@ const arrayState = {
   remove,
   find,
   replace,
+  findIndex,
 };
 
 export default arrayState;
