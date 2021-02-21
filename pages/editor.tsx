@@ -1,15 +1,15 @@
 import Head from "next/head";
 import React from "react";
 
-import Nav from "../../components/Nav";
-import Title from "../../components/Title";
-import Wrapper from "../../components/Wrapper";
+import Nav from "../components/Nav";
+import Title from "../components/Title";
+import Wrapper from "../components/Wrapper";
 
-import { usePage } from "../../store/page";
+import { usePage } from "../store/page";
 
-import { isServer } from "../../utils/isServer";
+import { isServer } from "../utils/isServer";
 
-import { Container } from "./styles";
+import { Container } from "../styles/editor";
 
 const Editor: React.FC = () => {
   const { current, get } = usePage();

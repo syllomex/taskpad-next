@@ -8,7 +8,7 @@ export const Container = styled.div`
   }
 
   &:focus-within {
-    background-color: var(--background-secondary);
+    background-color: var(--background-tertiary);
   }
 `;
 

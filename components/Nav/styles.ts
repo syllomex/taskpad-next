@@ -11,6 +11,7 @@ export const Container = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  flex-shrink: 0;
 
   scrollbar-width: 0px;
 
